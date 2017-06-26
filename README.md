@@ -1,0 +1,1 @@
+React Native styles extention
