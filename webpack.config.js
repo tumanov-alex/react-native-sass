@@ -1,42 +1,40 @@
-var webpack = require('webpack');
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
 
-var BUILD_DIR = path.resolve(__dirname, 'build');
-var APP_DIR = path.resolve(__dirname, 'src');
+const PATHS = {
+  app: path.join(__dirname, 'src/test.js'),
+  html: path.join(__dirname, 'src/index.html'),
+};
 
 module.exports = {
-  devtool: 'cheap-eval-source-map',
+  devtool: 'cheap-module-eval-source-map',
   entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/dev-server',
-    APP_DIR + '/test.js',
+    PATHS.app,
+    PATHS.html,
   ],
   output: {
-    path: BUILD_DIR,
-    filename: "bundle.js",
+    path: path.join(__dirname, 'build'),
+    filename: 'bundle.js',
   },
   plugins: [
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({
-      template: './src/index.html'
-    })
   ],
+  watch: true,
+  watchOptions: {
+    aggregateTimeout: 100,
+  },
   module: {
     loaders: [
       {
-        test: /\.js?/,
-        include: APP_DIR,
-        loader: 'babel-loader',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loaders: ['babel-loader'],
       },
       {
         test: /\.html$/,
-        loader: "raw-loader",
+        loaders: ['html-loader'],
       },
     ],
-  },
-  devServer: {
-    contentBase: './build',
-    hot: true
   },
 };

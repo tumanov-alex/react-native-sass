@@ -1,6 +1,6 @@
-import RNS from './index';
+import toRNS from './index';
 
-console.log(RNS({
+console.log(toRNS({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -18,3 +18,4 @@ console.log(RNS({
     marginBottom: 5,
   },
 }));
+
