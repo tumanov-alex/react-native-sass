@@ -1,6 +1,10 @@
 {
   "presets": [
     "es2015",
-    "env"
+    "env",
+    "stage-0"
+  ],
+  "plugins": [
+    "./plugin_build/index.js"
   ]
 }
