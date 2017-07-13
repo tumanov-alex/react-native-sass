@@ -45,8 +45,7 @@ export default function ({ types: t }) {
       CallExpression(call) {
         const callee = call.node.callee;
 
-        // todo: use default methods instead
-        if (callee.type === 'MemberExpression' &&
+        if (t.isMemberExpression(callee.type) &&
           (callee.object.name === 'StyleSheet' && callee.property.name === 'create')
         ) {
           const styleNode = call.node.arguments[0].properties;
