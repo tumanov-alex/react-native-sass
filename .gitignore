@@ -2,6 +2,8 @@
 build/
 node_modules/
 plugin_build/
+babelrcSpare/
 
 yarn.lock
 yarn-error.log
+src/output.txt

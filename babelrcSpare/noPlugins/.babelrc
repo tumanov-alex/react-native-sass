@@ -4,8 +4,5 @@
     "env",
     "stage-0",
     "react"
-  ],
-  "plugins": [
-    "./plugin_build/index.js"
   ]
 }

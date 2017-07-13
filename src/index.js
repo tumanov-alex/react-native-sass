@@ -1,16 +1,70 @@
+import { parse } from 'babylon';
+import {
+  objectProperty,
+  identifier,
+  objectExpression,
+} from 'babel-types';
+import generate from 'babel-generator';
+
+function flattenStyles(styleName, styleProps, mainStyleNode) {
+  const styleTransformedProps = [];
+
+  styleProps.map((prop) => {
+    const stylePropName = prop.key.name;
+
+    if (prop.value.type === 'ObjectExpression' && stylePropName !== 'transform') {
+      const styleTransformedName = `${styleName}_${stylePropName}`;
+
+      const styleTransformed = objectProperty(
+        identifier(styleTransformedName),
+        objectExpression(
+          flattenStyles(styleTransformedName, prop.value.properties, mainStyleNode)));
+
+      // console.log('=========================================')
+      // console.log(styleTransformed)
+      // console.log('-----------------')
+      // console.log(styleTransformed.value.properties)
+      if (styleName === 'customProp') {
+        console.log(styleTransformed)
+      }
+      styleTransformedProps.push(styleTransformed);
+      mainStyleNode.push(styleTransformed);
+      delete mainStyleNode[styleName];
+    } else {
+      styleTransformedProps.push(prop);
+    }
+  });
+
+  // console.log(styleTransformedProps)
+  return styleTransformedProps;
+}
+
 export default function ({ types: t }) {
   return {
     visitor: {
-      MemberExpression (path) {
-        const node = path.node;
+      CallExpression(call) {
+        const callee = call.node.callee;
 
-        if (node.object.name === 'StyleSheet' && node.property.name === 'create') {
-          console.log(node.object.name)
-          console.log(node.property.name)
+        // todo: use default methods instead
+        if (callee.type === 'MemberExpression' &&
+          (callee.object.name === 'StyleSheet' && callee.property.name === 'create')
+        ) {
+          const styleNode = call.node.arguments[0].properties;
 
-          // "acorn" is wrong, what is right? https://astexplorer.net/
-          console.log('\n=========================================')
+          styleNode.map((node) => {
+            const name = node.key.name;
+            const props = node.value.properties;
+
+            flattenStyles(name, props, styleNode);
+          });
         }
+      },
+      JSXElement(el) {
+        // console.log(el.node.openingElement)
+      },
+      JSXAttribute(path) {
+        console.log(path.node)
+        console.log('=========================================')
       },
     },
   };
