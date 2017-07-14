@@ -6,7 +6,6 @@ for (let i = 0; i < 100; i++) {}
 
 export default styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#F5FCFF',
     customProp: {
       color: 'black',
@@ -16,17 +15,18 @@ export default styles = StyleSheet.create({
       },
     },
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+
 });
+// welcome: {
+//   fontSize: 20,
+//   textAlign: 'center',
+//   margin: 10,
+// },
+// instructions: {
+//   textAlign: 'center',
+//   color: '#333333',
+//   marginBottom: 5,
+// },
 
 // const components = [
 //   'ActivityIndicator',

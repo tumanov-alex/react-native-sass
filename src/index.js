@@ -20,22 +20,15 @@ function flattenStyles(styleName, styleProps, mainStyleNode) {
         objectExpression(
           flattenStyles(styleTransformedName, prop.value.properties, mainStyleNode)));
 
-      // console.log('=========================================')
-      // console.log(styleTransformed)
-      // console.log('-----------------')
-      // console.log(styleTransformed.value.properties)
-      if (styleName === 'customProp') {
-        console.log(styleTransformed)
-      }
-      styleTransformedProps.push(styleTransformed);
       mainStyleNode.push(styleTransformed);
-      delete mainStyleNode[styleName];
-    } else {
-      styleTransformedProps.push(prop);
+      // console.log(styleName)
+      // console.log('=========================================')
+
+      // delete mainStyleNode[styleName];
+      delete styleProps[styleName]
     }
   });
 
-  // console.log(styleTransformedProps)
   return styleTransformedProps;
 }
 
@@ -45,7 +38,7 @@ export default function ({ types: t }) {
       CallExpression(call) {
         const callee = call.node.callee;
 
-        if (t.isMemberExpression(callee.type) &&
+        if (callee.type === 'MemberExpression' &&
           (callee.object.name === 'StyleSheet' && callee.property.name === 'create')
         ) {
           const styleNode = call.node.arguments[0].properties;
@@ -56,14 +49,28 @@ export default function ({ types: t }) {
 
             flattenStyles(name, props, styleNode);
           });
+          styleNode.map(node => {
+            // console.log(node.key.name)
+            // console.log('----------------------------')
+            // console.log(node.value.properties)
+            // console.log('=========================================')
+          })
         }
       },
       JSXElement(el) {
-        // console.log(el.node.openingElement)
+        const attr = el.node.openingElement.attributes;
+        const style = attr.find(node =>
+          node.name.name === 'style');
+
+        // console.log(style && style.value.expression.property.name)
+
+        // console.log(el.node.openingElement.attributes.length &&
+        // el.node.openingElement.attributes[0].value.expression)
+        // console.log('=========================================')
       },
       JSXAttribute(path) {
-        console.log(path.node)
-        console.log('=========================================')
+        // console.log(path)
+        // console.log('=========================================')
       },
     },
   };

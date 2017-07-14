@@ -9,7 +9,7 @@
     "dbuild": "npm run build && npm run build",
     "noPlugin": "cp -R babelrcSpare/noPlugins/.babelrc .babelrc",
     "withPlugin": "cp -R babelrcSpare/withPlugins/.babelrc .babelrc",
-    "fix": "npm run noPlugin && npm run build && npm run withPlugin npm run build",
+    "fix": "npm run noPlugin && npm run build && npm run withPlugin && npm run build",
     "clean": "rm -rf plugin_build",
     "lint": "eslint src"
   },
